@@ -7,6 +7,9 @@ INSTALL
 
 (*Not tested yet.*)
 
+(*Main branch is called 'main'.*)
+
+
 * cd to your dev directory (e.g. cd ~/dev)
 * Install git
 * git clone https://github.com/shmooth/ideatracker.git (create and install your .ssh keys in github.com if necessary)
