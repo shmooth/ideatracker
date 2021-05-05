@@ -5,7 +5,7 @@ This is a simple CRUD app to to keep track of your ideas, so you can see which p
 ![Screenshot of sample ideas and their descriptions in a DataTable.net](https://repository-images.githubusercontent.com/364119798/c8419780-adc0-11eb-8754-e5b60a18ef9d)
 
 
-#INSTALL
+# INSTALL
 
 (*Not tested yet.*)
 
@@ -35,15 +35,37 @@ This is a simple CRUD app to to keep track of your ideas, so you can see which p
 -   Create user 'ideatracker' with password 'password' (change to suit)
 * composer update
 * npm install
-* npm run hot
 * artisan migrate (this creates the appropriate tables in the db)
 
 
-# RUN
+# Run
+
+* npm run hot
+* artisan serve
+
+
+# View
 
 Go to http://localhost:8000/login
 
 
-# MISC
+# Misc
+
+To seed the database with example data (as in the screenshot):
+
+    > artisan db:seed
+
+To get a list of HTTP routes, API and web:
+
+    > artisan route:list
+
+It can be helpful to set the path to artisan so that you can execute it from anywhere in your directory structure:
+
+    > alias artisan='/home/psmithsf/dev/ideatracker/artisan'
+
+    Store this in your ~/.bashrc if you like.
+
+
+
 
 
