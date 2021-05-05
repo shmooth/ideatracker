@@ -2,6 +2,8 @@
 
 This is a simple CRUD app to to keep track of your ideas, so you can see which pit to sink your time, money, and dreams into.
 
+![Screenshot of sample ideas and their descriptions in a DataTable.net](https://repository-images.githubusercontent.com/364119798/c8419780-adc0-11eb-8754-e5b60a18ef9d)
+
 
 #INSTALL
 
@@ -12,8 +14,7 @@ This is a simple CRUD app to to keep track of your ideas, so you can see which p
 
 * cd to your dev directory (e.g. cd ~/dev)
 * Install git
-* git@github.com:shmooth/ideatracker.git (create and install your .ssh keys in github.com if necessary)
-        OR
+* git@github.com:shmooth/ideatracker.git (create and install your .ssh keys in github.com if necessary) OR
 * git clone https://github.com/shmooth/ideatracker.git 
 * Copy .env.example file to .env
 * Update .env file
