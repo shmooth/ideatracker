@@ -16,12 +16,12 @@ INSTALL
 * Copy .env.example file to .env
 * Update .env file
    
-    DB_CONNECTION=mysql
-    DB_HOST=localhost
-    DB_PORT=3306
-    DB_DATABASE=ideatracker
-    DB_USERNAME=ideatracker
-    DB_PASSWORD=password
+        DB_CONNECTION=mysql
+        DB_HOST=localhost
+        DB_PORT=3306
+        DB_DATABASE=ideatracker
+        DB_USERNAME=ideatracker
+        DB_PASSWORD=password
 
     MAIL_MAILER=log # change from 'smtp' (email will now print to [projecthome]/storage/logs/laravel.log)
  
