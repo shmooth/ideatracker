@@ -40,13 +40,21 @@ This is a simple CRUD app to to keep track of your ideas, so you can see which p
 
 # Run
 
-* npm run hot
+* npm run hot (makes sure any (most) of your changes are reflected in auto-reloaded web page/app)
 * artisan serve
 
 
 # View
 
-Go to http://localhost:8000/login
+Go to 
+    
+    http://localhost:8000/login
+
+Register a new user here so you can log in:
+
+    http://localhost:8000/register
+
+    Verification link will show up in log file at [apphome]/storages/logs/laravel.log. Copy and paste it.
 
 
 # Misc
@@ -65,6 +73,11 @@ It can be helpful to set the path to artisan so that you can execute it from any
 
     Store this in your ~/.bashrc if you like.
 
+Roll back everything in the db to empty:
+
+    > artisan migrate:reset
+
+    Note, this will kill your login, too. You'll have to re-register.
 
 
 
