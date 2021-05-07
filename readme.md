@@ -1,6 +1,6 @@
 # ABOUT
 
-This is a simple CRUD app to to keep track of your ideas, so you can see which pit to sink your time, money, and dreams into.
+This is a simple CRUD app to to keep track of your ideas.
 
 ![Screenshot of sample ideas and their descriptions in a DataTable.net](https://repository-images.githubusercontent.com/364119798/c8419780-adc0-11eb-8754-e5b60a18ef9d)
 
