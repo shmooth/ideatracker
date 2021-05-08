@@ -41,7 +41,7 @@ This is a simple CRUD app to to keep track of your ideas.
 # Run
 
 * npm run hot (makes sure any (most) of your changes are reflected in auto-reloaded web page/app)
-* artisan serve
+* artisan serve --host=localhost
 
 
 # View

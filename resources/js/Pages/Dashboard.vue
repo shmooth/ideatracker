@@ -18,23 +18,17 @@
         </template>
         -->
 
+
+    <button @click="doModal">Call 'doModal()'</button>
+
+
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
-                        <h1>My Ideas</h1>
-
-
-<!--
-{{ info }}
--->
-
-
-<button @click="hi">Hi</button>
-
+                        <h1 class="text-2xl">My Ideas</h1>
                     </div>
                     <div class="p-6">
-
 
                     <table id="myTable" class="mx-auto display table-auto  border-green-400 p-4">
                         <thead>
@@ -45,16 +39,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!--
-                            <tr>
-                                <td class="p-4 border border-green-800">AskABiker.com</td>
-                                <td class="p-4 border border-green-800">Simple, funny Q&A about bikers</td>
-                            </tr>
-                            <tr>
-                                <td class="p-4 border border-green-800">SimpleWalkr</td>
-                                <td class="p-4 border border-green-800">Simple walking app with audio announcements</td>
-                            </tr>
-                            -->
+                            <!-- Filled in dynamically by DataTables component -->
                         </tbody>
                     </table>
                     </div>
@@ -62,20 +47,70 @@
             </div>
         </div>
     </breeze-authenticated-layout>
+
+    <v-tailwind-modal v-model="showModal" @confirm="confirm" @cancel="cancel">
+      <template v-slot:title>Hello, vue-final-modal</template>
+      <p>
+        Vue Final Modal is a renderless, stackable, detachable and lightweight
+        modal component.
+      </p>
+    </v-tailwind-modal>
+
+<!--
+    <vue-final-modal v-model="showModal" name="example">
+      This is our modal content...
+    </vue-final-modal>
+-->
+
+<!--
+    <button @click="showModal = true">Launch</button>
+-->
+
+
 </template>
 
 
 <script>
     import BreezeAuthenticatedLayout from '@/Layouts/Authenticated'
+    import IdeaModal from '@/Pages/idea.vue' // is this correct??
+    import VTailwindModal from '@/Components/VTailwindModal.vue' // is this correct??
+
+    //import VueFinalModal from 'vue-final-modal'
+
+    //import BreezeAuthenticatedLayoutModal from '@/Layouts/AuthenticatedModal'
+    // so these imported components -- you just name them whatever you want. awesome.
+    //import BreezeAuthenticatedLayoutPeter3 from '@/Layouts/Authenticated'
+
     import Inertia from '@inertiajs/inertia'
 
 
     export default {
+        inheritAttrs: false,
         components: {
             BreezeAuthenticatedLayout,
-            Inertia
+            IdeaModal,
+            //BreezeAuthenticatedLayoutModal,
+            Inertia,
+            //VueFinalModal,
+            VTailwindModal,
         },
         methods: {
+            confirm() {
+              // some code...
+              this.showModal = false;
+            },
+            close(){
+              this.showModal = false;
+            },
+            cancel(close) {
+              // some code...
+              close()
+            },
+            doModal(){
+                console.log('i am in the doModal() method...');
+                this.showModal=true;
+                //this.$vfm.show('example');
+            },
             hi(){
                 console.log('hi from the hi() \'methods:\' function...');
                 //console.log(this);
@@ -91,9 +126,11 @@
               .get('http://127.0.0.1:8000/api/ideas')
               .then(response => (this.info = response))
         },
-        data () {
+        data() {
             return {
-              info: null
+              showModal: false,
+              info: null,
+              counter: 0,
             }
           },
         mounted(){
@@ -120,20 +157,12 @@
 
             // listen for the onClick event on all table rows (tr)
             $( "#myTable tbody" ).on( "click", "tr", function() {
-                //this.hi(); // say hi
                 let data = table.row(this).data();
-                console.log(data.id);
+                //this.$vfm.show('example')
+                //document.$vfm.show('example')
+                //console.log('Idea ID: ' + Number(data.id));
+                console.log('Idea ID: ' + data.id);
             });
-            //}.bind(this));
-
-
-/*
-                 $('#myTable tbody').on('click', 'tr', function () {
-                     var data = table.row( this ).data();
-                     alert( 'You clicked on '+data[0]+'\'s row' );
-                 } );
-*/
-
 
         }
     }
