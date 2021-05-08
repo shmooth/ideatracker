@@ -9,7 +9,7 @@
 </style>
 
 <template>
-    <breeze-authenticated-layout>
+    <breeze-authenticated-layout ref="breezeauthlayout">
         <!--
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -19,7 +19,7 @@
         -->
 
 
-    <button @click="doModal">Call 'doModal()'</button>
+    <button @click="hello">Call 'hello()'</button>
 
 
         <div class="py-12">
@@ -48,82 +48,85 @@
         </div>
     </breeze-authenticated-layout>
 
-    <v-tailwind-modal v-model="showModal" @confirm="confirm" @cancel="cancel">
-      <template v-slot:title>Hello, vue-final-modal</template>
+    <v-tailwind-modal name="ideaModal" v-model="showModal" @confirm="confirm" @cancel="cancel">
+      <template v-slot:title>{{modal_title}}</template>
       <p>
-        Vue Final Modal is a renderless, stackable, detachable and lightweight
-        modal component.
+        {{modal_body}}
       </p>
     </v-tailwind-modal>
-
-<!--
-    <vue-final-modal v-model="showModal" name="example">
-      This is our modal content...
-    </vue-final-modal>
--->
-
-<!--
-    <button @click="showModal = true">Launch</button>
--->
-
 
 </template>
 
 
 <script>
     import BreezeAuthenticatedLayout from '@/Layouts/Authenticated'
-    import IdeaModal from '@/Pages/idea.vue' // is this correct??
-    import VTailwindModal from '@/Components/VTailwindModal.vue' // is this correct??
-
-    //import VueFinalModal from 'vue-final-modal'
-
-    //import BreezeAuthenticatedLayoutModal from '@/Layouts/AuthenticatedModal'
-    // so these imported components -- you just name them whatever you want. awesome.
-    //import BreezeAuthenticatedLayoutPeter3 from '@/Layouts/Authenticated'
-
+    import VTailwindModal from '@/Components/VTailwindModal.vue' 
     import Inertia from '@inertiajs/inertia'
 
+    // to try 'ref' stuff
+    import { onMounted, ref, } from 'vue';
 
     export default {
+      setup() {
+        const breezeauthlayout = ref(null);
+
+        // Before the component is mounted, the value
+        // of the ref is `null` which is the default
+        // value we've specified above.
+        onMounted(() => {
+          // Logs: `Headline`
+          console.log('breezeauthlayout.value: ' + breezeauthlayout);
+          console.log(breezeauthlayout);
+          console.log('from setup().onMounted() for breezeauthlayout...');
+        });
+
+        return {
+          // It is important to return the ref, otherwise it won't work.
+          breezeauthlayout,
+        };
+      },
         inheritAttrs: false,
         components: {
             BreezeAuthenticatedLayout,
-            IdeaModal,
-            //BreezeAuthenticatedLayoutModal,
-            Inertia,
-            //VueFinalModal,
             VTailwindModal,
+            Inertia,
         },
         methods: {
+            hello(){
+                console.log('hello, world');
+            },
             confirm() {
-              // some code...
+              console.log('We confirmed...');
               this.showModal = false;
             },
             close(){
+              console.log('We closed...');
               this.showModal = false;
             },
-            cancel(close) {
+            cancel(close) { // looks funky
               // some code...
+              console.log('We canceled...');
               close()
             },
             doModal(){
                 console.log('i am in the doModal() method...');
+                this.modal_title='Your Idea';
+                this.modal_body='This is where you dynamic message is going to go.... ';
                 this.showModal=true;
-                //this.$vfm.show('example');
+                //this.$vfm.show('example'); // programmtically show the modal
             },
             hi(){
-                console.log('hi from the hi() \'methods:\' function...');
-                //console.log(this);
+                console.log('hi(): hi from the hi() method...');
 
                 // try to put this in modal
-                this.$inertia.visit('idea',{});
+                //this.$inertia.visit('idea',{});
             }
         },
         created(){
             console.log('we are created! ');
             //console.log('this is: ' + JSON.stringify(this));
             axios
-              .get('http://127.0.0.1:8000/api/ideas')
+              .get('http://localhost:8000/api/ideas')
               .then(response => (this.info = response))
         },
         data() {
@@ -131,15 +134,29 @@
               showModal: false,
               info: null,
               counter: 0,
+              modal_title: '',
+              modal_body: '',
             }
           },
         mounted(){
-            console.log('test from the Dashboard.vue component...');
+            console.log('mounted(): test from the Dashboard.vue component\'s mounted() method...');
+            //console.log(this.$vfm);
+            console.log(this.$el);
+            this.hello();
 
-            //var table = $('#myTable').DataTable(this.info);
+            /*
+            this.modal_title='Your Idea';
+            this.modal_body='This is where you dynamic message is going to go.... ';
+            this.$vfm.show('ideaModal', 
+                {   modal_title: 'Test Title', modal_body: 'test modal body', userName: 'vue-final-modal' })
+                .then(() => {
+                    // do something on modal opened
+                    console.log('test yo...');
+                });
+            */
 
             // load the datatable with data
-            var table = $('#myTable').DataTable( {
+            var myDataTable = $('#myTable').DataTable( {
               "ajax": {
                 "url": "/api/ideas",
                 "dataSrc":"",
@@ -154,15 +171,35 @@
               ]
             });
 
+            console.log('Calling this method from mounted()...');
 
             // listen for the onClick event on all table rows (tr)
-            $( "#myTable tbody" ).on( "click", "tr", function() {
-                let data = table.row(this).data();
-                //this.$vfm.show('example')
-                //document.$vfm.show('example')
-                //console.log('Idea ID: ' + Number(data.id));
-                console.log('Idea ID: ' + data.id);
+            //$( "#myTable tbody" ).on( "click", "tr", function(event) {
+            $( "#myTable tbody" ).on( "click", "tr", {thisArg: this}, function(event) {
+                //console.log('this: ' + event.data.this1); // produces '<tr class="even">...</tr>'
+                console.log(event.data.thisArg); // produces '<tr class="even">...</tr>'
+                //console.log(this); // produces '<tr class="even">...</tr>'
+                //this.showModal=true;
+                //console.log(this); // produces '<tr class="even">...</tr>'
+                //console.log(event.currentTarget); // also produces '<tr class="even">...</tr>'
+                //let data = myDataTable.row(event.currentTarget).data();
+                //console.log('Idea ID: ' + data.id);
+                //this.showModal=true;
+                let data = myDataTable.row(this).data();
+                event.data.thisArg.modal_title=data.codename;
+                event.data.thisArg.modal_body=data.tagline;
+                event.data.thisArg.showModal=true;
+                event.data.thisArg.hello();
             });
+
+            /*
+            $( "#myTable tbody" ).on( "click", "tr", function(event) {
+                //console.log(this); // produces 'Proxy {route: ƒ, confirm: ƒ, close: ƒ, cancel: ƒ, …}'
+                this.$vfm.showModal=true;
+                this.$vfm.doModal();
+                console.log('I called doModal()...');
+            }.bind(this));
+            */
 
         }
     }
