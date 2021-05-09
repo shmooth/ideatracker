@@ -5,6 +5,11 @@ This is a simple CRUD app to to keep track of your ideas.
 ![Screenshot of sample ideas and their descriptions in a DataTable.net](https://repository-images.githubusercontent.com/364119798/c8419780-adc0-11eb-8754-e5b60a18ef9d)
 
 
+# TTD
+
+Everything. Basic crud functionality not working yet.
+
+
 # INSTALL
 
 (*Not tested yet.*)
