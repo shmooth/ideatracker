@@ -31,7 +31,8 @@ Everything. Basic crud functionality not working yet.
         DB_USERNAME=ideatracker
         DB_PASSWORD=password
         ...
-        MAIL_MAILER=log # change from 'smtp' (email will now print to [projecthome]/storage/logs/laravel.log)
+        # email will now print to [projecthome]/storage/logs/laravel.log, incl recovery emails
+        MAIL_MAILER=log # change from 'smtp' 
  
 * Install PHP
 * Install Node
