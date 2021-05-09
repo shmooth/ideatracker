@@ -10,6 +10,7 @@
 
 <template>
     <breeze-authenticated-layout ref="breezeauthlayout">
+
         <!--
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -20,6 +21,10 @@
 
 
     <button @click="hello">Call 'hello()'</button>
+
+      <div>
+        <p>{{currentDateTime()}}</p>
+      </div>
 
 
         <div class="py-12">
@@ -35,7 +40,8 @@
                             <tr class="p-4 border bg-gray-100">
                                 <th class="p-4 border border-gray-400 bg-blue-400 text-black">ID</th>
                                 <th class="p-4 border border-gray-400 bg-blue-400 text-black">Codename</th>
-                                <th class="p-4 border border-gray-400 bg-blue-400 text-black">Brief Description</th>
+                                <th class="p-4 border border-gray-400 bg-blue-400 text-black">Tagline</th>
+                                <th class="p-4 border border-gray-400 bg-blue-400 text-black">Last Updated</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -48,10 +54,14 @@
         </div>
     </breeze-authenticated-layout>
 
+
     <v-tailwind-modal name="ideaModal" v-model="showModal" @confirm="confirm" @cancel="cancel">
-      <template v-slot:title>{{modal_title}}</template>
+      <template v-slot:title>{{idea.codename}}</template>
       <p>
-        {{modal_body}}
+        {{idea.tagline}}
+      </p>
+      <p>
+        Updated at: {{idea.updated_at}}
       </p>
     </v-tailwind-modal>
 
@@ -62,6 +72,8 @@
     import BreezeAuthenticatedLayout from '@/Layouts/Authenticated'
     import VTailwindModal from '@/Components/VTailwindModal.vue' 
     import Inertia from '@inertiajs/inertia'
+    import moment from 'moment'
+
 
     // to try 'ref' stuff
     import { onMounted, ref, } from 'vue';
@@ -92,6 +104,21 @@
             Inertia,
         },
         methods: {
+            formatDate(myDatetime) {
+                return myDatetime;
+            },
+            currentDateTime() {
+                //return this.idea.created_at; 
+                //return moment().format('MMMM Do YYYY, h:mm:ss a')
+                //return moment().format('MMMM Do YYYY')
+                //return 'May 9, 2021';
+                //return moment().format(this.idea.created_at; 
+                //return 'cool';
+                //return 'lkjlkklj';
+            },
+            moment: function () {
+                return moment();
+            },
             hello(){
                 console.log('hello, world');
             },
@@ -110,8 +137,8 @@
             },
             doModal(){
                 console.log('i am in the doModal() method...');
-                this.modal_title='Your Idea';
-                this.modal_body='This is where you dynamic message is going to go.... ';
+                //this.modal_title='Your Idea';
+                //this.modal_body='This is where you dynamic message is going to go.... ';
                 this.showModal=true;
                 //this.$vfm.show('example'); // programmtically show the modal
             },
@@ -131,18 +158,24 @@
         },
         data() {
             return {
-              showModal: false,
-              info: null,
-              counter: 0,
-              modal_title: '',
-              modal_body: '',
+                showModal: false,
+                info: null,
+                counter: 0,
+                modal_title: '',
+                modal_body: '',
+                idea: {
+                    codename: '',
+                    tagline: '',
+                    created_at: '',
+                    updated_at: '',  
+                } 
             }
           },
         mounted(){
-            console.log('mounted(): test from the Dashboard.vue component\'s mounted() method...');
+            //console.log('mounted(): test from the Dashboard.vue component\'s mounted() method...');
             //console.log(this.$vfm);
-            console.log(this.$el);
-            this.hello();
+            //console.log(this.$el);
+            //this.hello();
 
             /*
             this.modal_title='Your Idea';
@@ -165,13 +198,22 @@
                   { "data" : "id" },
                   { "data" : "codename" },
                   { "data" : "tagline" },
+                  { "data" : "updated_at" },
+                  //{ "data" : "updated_at_local" },
               ],
               "columnDefs": [
-                  { "targets" : 0, "visible": false } // hide the 'ID' column (user doesn't want/need to see it)
+                  { "targets" : 0, "visible": false }, // hide the 'ID' column (user doesn't want/need to see it)
+                  { "targets": 3, "data": null, "render": // lame that we have to use this format
+                        function ( data, type, row, meta ) { 
+                            //return window.moment(data).format('Do MMM YYYY');
+                            return window.moment(data).fromNow();
+                        }
+                    },
+                  //{ "targets" : 3, render: $.fn.dataTable.render.moment.utc(d).local().format('DD/MM/YYYY HH:mm:ss')},
               ]
             });
 
-            console.log('Calling this method from mounted()...');
+            //console.log('Calling this method from mounted()...');
 
             // listen for the onClick event on all table rows (tr)
             //$( "#myTable tbody" ).on( "click", "tr", function(event) {
@@ -187,7 +229,9 @@
                 //this.showModal=true;
                 let data = myDataTable.row(this).data();
                 event.data.thisArg.modal_title=data.codename;
-                event.data.thisArg.modal_body=data.tagline;
+                event.data.thisArg.idea.codename=data.codename;
+                event.data.thisArg.idea.tagline=data.tagline;
+                event.data.thisArg.idea.updated_at=data.updated_at;
                 event.data.thisArg.showModal=true;
                 event.data.thisArg.hello();
             });

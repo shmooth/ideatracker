@@ -11,6 +11,9 @@ class IdeaController extends Controller
         //return Idea::all();
         //return Idea::all()->pluck('id','codename','tagline');        
         //return Idea::select('id', 'codename','tagline')->get();
-        return Idea::select( 'id','codename','tagline')->get();
+        return Idea::select( 'id','codename','tagline','updated_at')->get();
     }
 }
+
+
+

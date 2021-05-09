@@ -29,6 +29,8 @@
         "datatables.net": "^1.10.24",
         "datatables.net-dt": "^1.10.24",
         "jquery": "^3.6.0",
-        "vue-final-modal": "^3.2.1"
+        "moment": "^2.29.1",
+        "vue-final-modal": "^3.2.1",
+        "vue-moment": "^4.1.0"
     }
 }

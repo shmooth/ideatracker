@@ -5,13 +5,14 @@ import { createApp, h } from 'vue';
 import { App as InertiaApp, plugin as InertiaPlugin } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import VueFinalModal from 'vue-final-modal'
+import VueMoment from 'vue-moment';
+import moment from 'moment';
 
-//import 'datatables/media/css/jquery.dataTables.css';
-//import 'datatables';
+
 
 const el = document.getElementById('app');
 
-createApp({
+let app = createApp({
     render: () =>
         h(InertiaApp, {
             initialPage: JSON.parse(el.dataset.page),
@@ -21,6 +22,13 @@ createApp({
     .mixin({ methods: { route } })
     .use(InertiaPlugin)
     .use(VueFinalModal())
+    //.use(require('vue-moment'))
     .mount(el);
 
+//app.config.globalProperties.$moment=moment;
+
 InertiaProgress.init({ color: '#4B5563' });
+
+
+
+
