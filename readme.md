@@ -80,5 +80,9 @@ Roll back everything in the db to empty:
     Note, this will kill your login, too. You'll have to re-register.
 
 
+# Gotchas / Lessons Learned
+
+The datatables component's `render()` function within the `ColumnDefs` will fail for all rows/data if it fails for _any_ rows/data. So, look out for null/missing datetimes, which was my case.
+
 
 
