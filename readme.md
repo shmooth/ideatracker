@@ -87,6 +87,22 @@ Roll back everything in the db to empty:
 
 # Gotchas / Lessons Learned
 
+If you're using jQuery with Vue3, and you don't have a jQuery-Vue plugin of some type installed, you might have to do some funky stuff. Below, I show how to pass 'this' to the jQuery `.on()` click event handler, so that we can use it and the other `this`, which is a different one/context (obviously?), within the callback. We use them both.
+
+    211             // listen for the onClick event on all table rows (tr)
+    212             $( "#myTable tbody" ).on( "click", "tr", {thisArg: this}, function(event) {
+    213                 //console.log('this: ' + event.data.this1); // produces '<tr class="even">...</tr>'
+    214                 //console.log(event.data.thisArg); // produces '<tr class="even">...</tr>'
+    215                 //console.log(this); // produces '<tr class="even">...</tr>'
+    216                 let data = myDataTable.row(this).data();
+    217                 event.data.thisArg.modal_title=data.codename;
+    218                 event.data.thisArg.idea.codename=data.codename;
+    219                 event.data.thisArg.idea.tagline=data.tagline;
+    220                 event.data.thisArg.idea.updated_at=data.updated_at;
+    221                 event.data.thisArg.showModal=true;
+    222             });
+
+
 The datatables component's `render()` function within the `ColumnDefs` will fail for all rows/data if it fails for _any_ rows/data. So, look out for null/missing datetimes, which was my case.
 
 
