@@ -115,9 +115,9 @@ Roll back everything in the db to empty:
 
 * If you want your web app/SPA (Single-Page App) to consume your API, one strategy with Laravel is to do what I did -- replace the `'api'` middleware from the 'api' routes group (Lines 42-43 in [app/Providers/RouteServiceProvider.php](https://github.com/shmooth/ideatracker/blob/main/app/Providers/RouteServiceProvider.php) below) with the `'web'` middleware. 
 
-    What this does, effectively, is to give your API routes the same security posture as your web routes -- which gives you the advantage of being able to keep your API routes separated functionally and semantically (in your `api.php` file) from your web routes (in your `web.php` file). This allows you to have a consistent way of knowing the contexts of these requests -- for instance, knowing when to return JSON vs. html/templates/components.
+    What this does, effectively, is to give your API routes the same security posture as your web routes -- which gives you the advantage of being able to keep your API routes separated functionally and semantically (in your `api.php` file) from your web routes (in your `web.php` file). This allows you to have a consistent way of knowing the contexts of these requests -- for instance, knowing when to return JSON vs. html/templates/components. What you lose for this extreme simplicity is rate limiting, a functionality built into the `api` middleware.
 
-    The other option is to set up tokens/keys/JWTs/OAuth/etc using [Laravel Sanctum](https://laravel.com/docs/8.x/sanctum) or other tools. Also see: [Laravel Middleware Groups](https://laravel.com/docs/8.x/middleware#middleware-groups). 
+    The other option is to set up tokens/keys/JWTs/OAuth/etc using [Laravel Sanctum](https://laravel.com/docs/8.x/sanctum) or other tools. Also see: [Laravel Middleware Groups](https://laravel.com/docs/8.x/middleware#middleware-groups). Some options could allow the relative simplicity of web route-oriented authentication/authorization, with API-centric capabilities like rate limiting -- which you may want depending on if you charge for access to your API, to prevent DDOS attacks/security, etc.
     
     NOTE: API Keys, alone, are often -- or generally -- no longer considered secure, or secure enough.
 
