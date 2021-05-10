@@ -62,13 +62,13 @@ Basic CRUD functionality not fully implemented yet.
 
 Go to 
     
-    http://localhost:8000/login
+    `http://localhost:8000/login`
 
 Register a new user here so you can log in:
 
-    http://localhost:8000/register
+    `http://localhost:8000/register`
 
-    Verification link will show up in log file at [apphome]/storages/logs/laravel.log. Copy and paste it.
+Verification link will show up in log file at `[apphome]/storages/logs/laravel.log`. Copy and paste it into browser.
 
 
 # Misc
