@@ -7,7 +7,7 @@ This is a simple CRUD app to to keep track of your ideas.
 
 # TTD
 
-Everything. Basic crud functionality not working yet.
+Basic CRUD functionality not fully implemented yet.
 
 
 # INSTALL
@@ -17,12 +17,17 @@ Everything. Basic crud functionality not working yet.
 (*Main branch is called 'main'.*)
 
 
-* cd to your dev directory (e.g. cd ~/dev)
-* Install git
-* git@github.com:shmooth/ideatracker.git (create and install your .ssh keys in github.com if necessary) OR
-* git clone https://github.com/shmooth/ideatracker.git 
-* Copy .env.example file to .env
-* Update .env file
+* cd to your dev directory (e.g. `cd ~/dev`)
+* `sudo apt-get install git`
+    - Install git command line client
+* Clone this repo (choose one)
+    * `git clone git@github.com:shmooth/ideatracker.git` 
+        - create and install your .ssh keys at/in github.com if necessary
+    OR
+    * `git clone https://github.com/shmooth/ideatracker.git`
+        - this option may no longer be available b/c of new 2FA github policy 
+* Copy `.env.example` file to `.env`
+* Update `.env` file
    
         DB_CONNECTION=mysql
         DB_HOST=localhost
@@ -37,17 +42,20 @@ Everything. Basic crud functionality not working yet.
 * Install PHP
 * Install Node
 * Install MariaDB
--   Create database 'ideatracker'
--   Create user 'ideatracker' with password 'password' (change to suit)
-* composer update
-* npm install
-* artisan migrate (this creates the appropriate tables in the db)
+    - Create database 'ideatracker'
+    - Create user 'ideatracker' with password 'password' (change to suit)
+* `composer update`
+* `npm install`
+* `artisan migrate` 
+    - this creates the appropriate tables in the db
 
 
 # Run
 
-* npm run hot (makes sure any (most) of your changes are reflected in auto-reloaded web page/app)
-* artisan serve --host=localhost
+* `npm run hot` 
+    - makes sure _most_ of your changes are reflected in auto-reloaded web page/app
+* `artisan serve --host=localhost` 
+    - runs your local dev server
 
 
 # View
@@ -88,23 +96,22 @@ Roll back everything in the db to empty:
 
 # Gotchas / Lessons Learned
 
-If you're using jQuery with Vue3, and you don't have a jQuery-Vue plugin of some type installed, you might have to do some funky stuff. Below, I show how to pass 'this' to the jQuery `.on()` click event handler, so that we can use it and the other `this`, which is a different one/context (obviously?), within the callback. We use them both.
+* If you're using jQuery with Vue3, and you don't have a jQuery-Vue plugin of some type installed, you might have to do some funky stuff. Below, I show how to pass 'this' to the jQuery `.on()` click event handler, so that we can use it and the other `this`, which is a different one/context (obviously?), within the callback. We use them both.
 
-    211     // listen for the onClick event on all table rows (tr)
-    212     $( "#myTable tbody" ).on( "click", "tr", {thisArg: this}, function(event) {
-    213         //console.log('this: ' + event.data.this1); // produces '<tr class="even">...</tr>'
-    214         //console.log(event.data.thisArg); // produces '<tr class="even">...</tr>'
-    215         //console.log(this); // produces '<tr class="even">...</tr>'
-    216         let data = myDataTable.row(this).data();
-    217         event.data.thisArg.modal_title=data.codename;
-    218         event.data.thisArg.idea.codename=data.codename;
-    219         event.data.thisArg.idea.tagline=data.tagline;
-    220         event.data.thisArg.idea.updated_at=data.updated_at;
-    221         event.data.thisArg.showModal=true;
-    222     });
+        211    // listen for the onClick event on all table rows (tr)
+        212    $( "#myTable tbody" ).on( "click", "tr", {thisArg: this}, function(event) {
+        213        //console.log(this);                // produces '<tr class="even">...</tr>'
+        214        //console.log(event.data.thisArg);  // produces 'Proxy {route: ƒ…}'; aka the Vue component
+        215        let data = myDataTable.row(this).data();
+        216        event.data.thisArg.modal_title=data.codename;
+        217        event.data.thisArg.idea.codename=data.codename;
+        218        event.data.thisArg.idea.tagline=data.tagline;
+        219        event.data.thisArg.idea.updated_at=data.updated_at;
+        220        event.data.thisArg.showModal=true;
+        221    });
 
 
-The datatables component's `render()` function within the `ColumnDefs` will fail for all rows/data if it fails for _any_ rows/data. So, look out for null/missing datetimes, which was my case.
+* The datatables component's `render()` function within the `ColumnDefs` will fail for all rows/data if it fails for _any_ rows/data. So, look out for null/missing datetimes, which was my case. Need a way to more-gracefully handle 'Invalid date' errors -- like log the problem row, then return a date that makes sense for the contenxt -- either epoch time, current datetime, or future time. Also, possibly allow for quick repair.
 
 
 
