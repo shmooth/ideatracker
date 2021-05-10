@@ -113,5 +113,28 @@ Roll back everything in the db to empty:
 
 * The datatables component's `render()` function within the `ColumnDefs` will fail for all rows/data if it fails for _any_ rows/data. So, look out for null/missing datetimes, which was my case. Need a way to more-gracefully handle 'Invalid date' errors -- like log the problem row, then return a date that makes sense for the contenxt -- either epoch time, current datetime, or future time. Also, possibly allow for quick repair.
 
+* If you want your web app/SPA (Single-Page App) to consume your API, one strategy with Laravel is to do what I did -- replace the `'api'` middleware from the 'api' routes group (Lines 42-43 in [app/Providers/RouteServiceProvider.php](https://github.com/shmooth/ideatracker/blob/main/app/Providers/RouteServiceProvider.php) below) with the `'web'` middleware. 
 
+    What this does, effectively, is to give your API routes the same security posture as your web routes -- which gives you the advantage of being able to keep your API routes separated functionally and semantically (in your `api.php` file) from your web routes (in your `web.php` file). This allows you to have a consistent way of knowing the contexts of these requests -- for instance, knowing when to return JSON vs. html/templates/components.
 
+    The other option is to set up tokens/keys/JWTs/OAuth/etc using [Laravel Sanctum](https://laravel.com/docs/8.x/sanctum) or other tools. Also see: [Laravel Middleware Groups](https://laravel.com/docs/8.x/middleware#middleware-groups). 
+    
+    NOTE: API Keys, alone, are often -- or generally -- no longer considered secure, or secure enough.
+
+      36     public function boot()
+      37     {
+      38         $this->configureRateLimiting();
+      39 
+      40         $this->routes(function () {
+      41             Route::prefix('api')
+      42                 //->middleware('api') // removed
+      43                 ->middleware('web') // added
+      44                 ->namespace($this->namespace)
+      45                 ->group(base_path('routes/api.php'));
+      46 
+      47             Route::middleware('web')
+      48                 ->namespace($this->namespace)
+      49                 ->group(base_path('routes/web.php'));
+      50         });
+      51     }
+ 
