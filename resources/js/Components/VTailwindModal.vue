@@ -9,14 +9,14 @@
     <span class="mr-8 text-2xl font-bold">
       <slot name="title"></slot>
     </span>
-    <div class="flex-grow overflow-y-auto">
+    <div class="flex-grow overflow-visible">
       <slot :params="params"></slot>
     </div>
     <div class="flex-shrink-0 flex justify-center items-center pt-4">
       <button class="vfm-btn" @click="$emit('confirm', close)">confirm</button>
       <button class="vfm-btn" @click="$emit('cancel', close)">cancel</button>
     </div>
-    <button class="absolute top-0 right-0 mt-2 mr-2" @click="close">
+    <button class="absolute top-0 right-0 m-0" @click="close">
       <!-- <mdi-close></mdi-close> -->
     <svg focusable="false" width="2em" height="2em" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41z" fill="currentColor"></path></svg>
     </button>

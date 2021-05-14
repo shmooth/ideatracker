@@ -8,6 +8,7 @@
 }
 </style>
 
+
 <template>
     <breeze-authenticated-layout ref="breezeauthlayout">
 
@@ -32,6 +33,7 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <h1 class="text-2xl">My Ideas</h1>
+                        <h1 class="text-2xl">My 'Add' Button</h1>
                     </div>
                     <div class="p-6">
 
@@ -56,13 +58,29 @@
 
 
     <v-tailwind-modal name="ideaModal" v-model="showModal" @confirm="confirm" @cancel="cancel">
-      <template v-slot:title>{{idea.codename}}</template>
-      <p>
-        {{idea.tagline}}
-      </p>
-      <p>
-        Updated at: {{idea.updated_at}}
-      </p>
+
+        <p>
+            <table id="notMainIdeaTable" class="m-2 p-2 shadow-lg bg-white">
+            <!-- <table id="notMainIdeaTable" class="table-fixed grid grid-cols-1 divide-y divide-yellow-500"> -->
+              <tr>
+                <td class="text-right font-bold w-1/4 bg-blue-100 border text-left px-8 py-4">Codename</td>
+                <td class="border px-8 py-4"> {{idea.codename}} </td>
+              </tr>
+              <tr>
+                <td class="text-right font-bold bg-blue-100 border text-left px-8 py-4">Tagline</td>
+                <td class="border px-8 py-4"> {{idea.tagline}} </td>
+              </tr>
+              <tr>
+                <td class="text-right font-bold bg-blue-100 border text-left px-8 py-4">Description</td>
+                <td class="border px-8 py-4">{{idea.description}}</td>
+              </tr>
+              <tr>
+                <td class="text-right font-bold bg-blue-100 border text-left px-8 py-4">Updated</td>
+                <td class="border px-8 py-4">{{fromNow(idea.updated_at)}}</td>
+              </tr>
+            </table>
+        </p>
+
     </v-tailwind-modal>
 
 </template>
@@ -87,9 +105,9 @@
         // value we've specified above.
         onMounted(() => {
           // Logs: `Headline`
-          console.log('breezeauthlayout.value: ' + breezeauthlayout);
-          console.log(breezeauthlayout);
-          console.log('from setup().onMounted() for breezeauthlayout...');
+          //console.log('breezeauthlayout.value: ' + breezeauthlayout);
+          //console.log(breezeauthlayout);
+          //console.log('from setup().onMounted() for breezeauthlayout...');
         });
 
         return {
@@ -107,20 +125,16 @@
             formatDate(myDatetime) {
                 return myDatetime;
             },
+            fromNow(datetime){ 
+                return window.moment(datetime).fromNow();
+            },
             currentDateTime() {
-                //return this.idea.created_at; 
-                //return moment().format('MMMM Do YYYY, h:mm:ss a')
-                //return moment().format('MMMM Do YYYY')
-                //return 'May 9, 2021';
-                //return moment().format(this.idea.created_at; 
-                //return 'cool';
-                //return 'lkjlkklj';
             },
             moment: function () {
                 return moment();
             },
             hello(){
-                console.log('hello, world');
+                //console.log('hello, world');
             },
             confirm() {
               console.log('We confirmed...');
@@ -132,7 +146,7 @@
             },
             cancel(close) { // looks funky
               // some code...
-              console.log('We canceled...');
+              //console.log('We canceled...');
               close()
             },
             doModal(){
@@ -150,7 +164,7 @@
             }
         },
         created(){
-            console.log('we are created! ');
+            //console.log('we are created! ');
             //console.log('this is: ' + JSON.stringify(this));
             axios
               .get('http://localhost:8000/api/ideas')
@@ -206,6 +220,8 @@
                   { "targets": 3, "data": null, "render": // lame that we have to use this format
                         function ( data, type, row, meta ) { 
                             //return window.moment(data).format('Do MMM YYYY');
+                            //console.log('data:');
+                            //console.log(data);
                             return window.moment(data).fromNow();
                         }
                     },
@@ -216,17 +232,10 @@
             //console.log('Calling this method from mounted()...');
 
             // listen for the onClick event on all table rows (tr)
-            //$( "#myTable tbody" ).on( "click", "tr", function(event) {
             $( "#myTable tbody" ).on( "click", "tr", {thisArg: this}, function(event) {
                 //console.log('this: ' + event.data.this1); // produces '<tr class="even">...</tr>'
-                console.log(event.data.thisArg); // produces '<tr class="even">...</tr>'
+                //console.log(event.data.thisArg); // produces '<tr class="even">...</tr>'
                 //console.log(this); // produces '<tr class="even">...</tr>'
-                //this.showModal=true;
-                //console.log(this); // produces '<tr class="even">...</tr>'
-                //console.log(event.currentTarget); // also produces '<tr class="even">...</tr>'
-                //let data = myDataTable.row(event.currentTarget).data();
-                //console.log('Idea ID: ' + data.id);
-                //this.showModal=true;
                 let data = myDataTable.row(this).data();
                 event.data.thisArg.modal_title=data.codename;
                 event.data.thisArg.idea.codename=data.codename;
