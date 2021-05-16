@@ -13,8 +13,10 @@
       <slot :params="params"></slot>
     </div>
     <div class="flex-shrink-0 flex justify-center items-center pt-4">
-      <button class="vfm-btn" @click="$emit('confirm', close)">confirm</button>
-      <button class="vfm-btn" @click="$emit('cancel', close)">cancel</button>
+      <!-- <button class="vfm-btn" @click="$emit('confirm', close)">Confirm</button> -->
+      <button ref="editsavebutton" id="editsave" class="vfm-btn" @click="$emit('edit', close)">Edit</button>
+      <button id="closecancel" class="vfm-btn" @click="$emit('cancel', close)">Close</button>
+      <!-- <button class="vfm-btn" @click="$emit('save', close)">Save</button> -->
     </div>
     <button class="absolute top-0 right-0 m-0" @click="close">
       <!-- <mdi-close></mdi-close> -->
@@ -28,7 +30,7 @@
 export default {
   name: 'VTailwindModal',
   inheritAttrs: false,
-  emits: ['cancel', 'confirm']
+  emits: ['cancel', 'confirm', 'edit', 'save']
 }
 </script>
 

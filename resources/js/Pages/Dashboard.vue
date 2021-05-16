@@ -57,22 +57,32 @@
     </breeze-authenticated-layout>
 
 
-    <v-tailwind-modal name="ideaModal" v-model="showModal" @confirm="confirm" @cancel="cancel">
+    <v-tailwind-modal name="ideaModal" v-model="showModal" @cancel="cancel" @confirm="confirm" @edit="edit" @save="save">
 
+        <form>
         <p>
             <table id="notMainIdeaTable" class="m-2 p-2 shadow-lg bg-white">
             <!-- <table id="notMainIdeaTable" class="table-fixed grid grid-cols-1 divide-y divide-yellow-500"> -->
               <tr>
                 <td class="text-right font-bold w-1/4 bg-blue-100 border text-left px-8 py-4">Codename</td>
-                <td class="border px-8 py-4"> {{idea.codename}} </td>
+                <td class="border px-8 py-4">
+                    <span v-if="!showEditFields">{{idea.codename}}</span>
+                    <input type="text" v-if="showEditFields" id="codename" name="codename" v-model="idea.codename"/>
+                </td>
               </tr>
               <tr>
                 <td class="text-right font-bold bg-blue-100 border text-left px-8 py-4">Tagline</td>
-                <td class="border px-8 py-4"> {{idea.tagline}} </td>
+                <td class="border px-8 py-4">
+                    <span v-if="!showEditFields">{{idea.tagline}}</span>
+                    <input type="text" v-if="showEditFields" id="tagline" name="tagline" v-model="idea.tagline"/>
+                </td>
               </tr>
               <tr>
                 <td class="text-right font-bold bg-blue-100 border text-left px-8 py-4">Description</td>
-                <td class="border px-8 py-4">{{idea.description}}</td>
+                <td class="border px-8 py-4">
+                    <span v-if="!showEditFields">{{idea.description}}</span>
+                    <input type="text" v-if="showEditFields" id="description" name="description" v-model="idea.description"/>
+                </td>
               </tr>
               <tr>
                 <td class="text-right font-bold bg-blue-100 border text-left px-8 py-4">Updated</td>
@@ -80,6 +90,7 @@
               </tr>
             </table>
         </p>
+        </form>
 
     </v-tailwind-modal>
 
@@ -137,17 +148,54 @@
                 //console.log('hello, world');
             },
             confirm() {
-              console.log('We confirmed...');
-              this.showModal = false;
-            },
-            close(){
-              console.log('We closed...');
-              this.showModal = false;
+                console.log('We confirmed...');
+                this.close();
+                this.showModal = false;
             },
             cancel(close) { // looks funky
-              // some code...
-              //console.log('We canceled...');
-              close()
+                // some code...
+                //console.log('We canceled...');
+                this.close()
+            },
+            close(){
+                //console.log('We closed...');
+                this.showModal = false;
+                this.showEditFields=false;
+                document.getElementById("editsave").innerHTML= 'Edit'; // set back to its original value
+            },
+            edit(event){
+                console.log('we are in the edit(event) method...');
+                // if we are coming from the edit state
+                if(this.editState===true){
+
+                    // then we must have clicked 'Save'
+                    this.editState=false;
+                    console.log('Saving...'); 
+
+                    // persist the udated record to the db
+
+                    // show status/'Saved' message
+
+                    // disappear this modal
+                    this.showModal = false;
+                    // remove the form fields for next modal
+                    this.showEditFields=false;
+                    // chnage default button to 'Edit' again
+                    document.getElementById("editsave").innerHTML= 'Edit'; // do this only after form processed
+                }
+                else{
+                    this.editState=true;
+                    console.log('Editing...'); 
+                    // we must have clicked 'Edit'
+                    this.showEditFields=true;
+                    // change the 'Edit' button to say 'Save' now
+                    document.getElementById("editsave").innerHTML= 'Save';
+                }
+            },
+            save(){
+                this.showModal = false;
+                this.close();
+                //this.close();
             },
             doModal(){
                 console.log('i am in the doModal() method...');
@@ -172,6 +220,8 @@
         },
         data() {
             return {
+                editState: false,
+                showEditFields: false,
                 showModal: false,
                 info: null,
                 counter: 0,
@@ -180,6 +230,7 @@
                 idea: {
                     codename: '',
                     tagline: '',
+                    description: '',
                     created_at: '',
                     updated_at: '',  
                 } 
@@ -212,6 +263,7 @@
                   { "data" : "id" },
                   { "data" : "codename" },
                   { "data" : "tagline" },
+                  //{ "data" : "description" }, // we are not showing this on this screen
                   { "data" : "updated_at" },
                   //{ "data" : "updated_at_local" },
               ],
@@ -240,6 +292,7 @@
                 event.data.thisArg.modal_title=data.codename;
                 event.data.thisArg.idea.codename=data.codename;
                 event.data.thisArg.idea.tagline=data.tagline;
+                event.data.thisArg.idea.description=data.description;
                 event.data.thisArg.idea.updated_at=data.updated_at;
                 event.data.thisArg.showModal=true;
                 event.data.thisArg.hello();
